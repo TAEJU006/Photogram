@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.util.Script;
@@ -21,17 +22,18 @@ public class ControllerExceptionHandler {
 		// 1. 클라이언트에게 응답할때는 script 좋음
 		// 2. Ajax 통신 - CMRespDto
 		// 3. Android 통신 - CMRespDto
-		if(e.getErrorMap() == null) {
-			return Script.back(e.getMessage());
-		}else {
-			return Script.back(e.getErrorMap().toString());
-		}
-		
+		return Script.back(e.getErrorMap().toString());
 	}
-	
+
 	@ExceptionHandler(CustomValidationApiException.class)
 	public ResponseEntity<?> validationApiException(CustomValidationApiException e) {
 		// ResponseEntity 응답 -> ajax에 fail이 실행되어서 메시지, 에러맵이 날아감
 		return new ResponseEntity<>(new CMRespDto<>(-1, e.getMessage(), e.getErrorMap()), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(CustomApiException.class)
+	public ResponseEntity<?> apiException(CustomApiException e) {
+		// ResponseEntity 응답 -> ajax에 fail이 실행되어서 메시지, 에러맵이 날아감
+		return new ResponseEntity<>(new CMRespDto<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
 	}
 }

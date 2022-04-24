@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
-import com.cos.photogramstart.handler.ex.CustomValidationException;
 
 import lombok.RequiredArgsConstructor;
 
