@@ -1,6 +1,7 @@
 package com.cos.photogramstart.domain.user;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,17 +24,17 @@ import lombok.NoArgsConstructor;
 @Entity // DB에 table을 생성
 public class User {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) // 번호 증가 전략이 데이터베이스를 따라감
+	@GeneratedValue(strategy = GenerationType.IDENTITY) // 번호 증가 전략이 데이터베이스를 따라간다.
 	private int id;
 	
-	@Column(length=20, unique=true)
-	private String username;
+	@Column(length = 100,  unique = true) // OAuth2 로그인을 위해 칼럼 늘리기
+	private String username; 
 	@Column(nullable = false)
 	private String password;
 	@Column(nullable = false)
 	private String name;
-	private String website;
-	private String bio; // 자기소개
+	private String website; // 웹 사이트
+	private String bio; // 자기 소개
 	@Column(nullable = false)
 	private String email;
 	private String phone;
@@ -46,7 +47,7 @@ public class User {
 	
 	private LocalDateTime createDate;
 	
-	@PrePersist // DB에 insert 되기 직전에 실행
+	@PrePersist// DB에 insert 되기 직전에 실행
 	public void createDate() {
 		this.createDate = LocalDateTime.now();
 	}

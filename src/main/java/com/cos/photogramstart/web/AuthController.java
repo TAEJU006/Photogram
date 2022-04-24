@@ -21,8 +21,8 @@ import com.cos.photogramstart.web.dto.auth.SignupDto;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor //final 필드를 DI할때 사용
-@Controller // 1. IOC, 2. 파일을 리턴하는 controller
+@RequiredArgsConstructor // final 필드를 DI 할때 사용
+@Controller // 1. IoC 2. 파일을 리턴하는 컨트롤러
 public class AuthController {
 
 	private static final Logger log = LoggerFactory.getLogger(AuthController.class);
@@ -52,24 +52,26 @@ public class AuthController {
 		log.info(signupDto.toString());
 		// User <- SignupDto
 
-		if(bindingResult.hasErrors()) {
-			Map<String,String> errorMap = new HashMap<>();
-			
-			//bindingResult의 getFieldErrors에 다 모아줌, for문 돌면서 에러를  error에 담아줌
-			for(FieldError error:bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(),error.getDefaultMessage());
-				System.out.println("===============");
-				System.out.println(error.getDefaultMessage());
-				System.out.println("===============");
-			}
-			throw new CustomValidationException("유효성 검사 실패 :(",errorMap);
-		}else {
-			User user = signupDto.toEntity();
-			log.info(user.toString());
-			User userEntity = authService.회원가입(user);
-			System.out.println(userEntity);
-			return "auth/signin";
-		}
+//		if(bindingResult.hasErrors()) {
+//			Map<String,String> errorMap = new HashMap<>();
+//			
+//			//bindingResult의 getFieldErrors에 다 모아줌, for문 돌면서 에러를  error에 담아줌
+//			for(FieldError error:bindingResult.getFieldErrors()) {
+//				errorMap.put(error.getField(),error.getDefaultMessage());
+//				System.out.println("===============");
+//				System.out.println(error.getDefaultMessage());
+//				System.out.println("===============");
+//			}
+//			throw new CustomValidationException("유효성 검사 실패 :(",errorMap);
+//		}else {
 		
-	}
-}
+		// User < - SignupDto
+				User user = signupDto.toEntity();
+				authService.회원가입(user);
+				// System.out.println(userEntity);
+
+				// 로그를 남기는 후처리!!
+				return "auth/signin";
+
+			}
+		}

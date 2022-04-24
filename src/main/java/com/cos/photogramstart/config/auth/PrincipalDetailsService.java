@@ -11,8 +11,8 @@ import com.cos.photogramstart.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@Service
-public class PrincipalDetailsService implements UserDetailsService {
+@Service // IoC
+public class PrincipalDetailsService implements UserDetailsService{
 
 	private final UserRepository userRepository;
 
@@ -20,12 +20,12 @@ public class PrincipalDetailsService implements UserDetailsService {
 	//  2. 리턴이 잘 되면 자동으로 UserDetails 타입을 세션으로 만듦
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
+		
 		User userEntity = userRepository.findByUsername(username);
-
-		if (userEntity == null) {
+		
+		if(userEntity == null) {
 			return null;
-		} else {
+		}else {
 			return new PrincipalDetails(userEntity);
 		}
 	}
