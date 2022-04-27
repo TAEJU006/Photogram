@@ -1,13 +1,16 @@
 package com.cos.photogramstart.service;
 
-import javax.transaction.Transactional;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.cos.photogramstart.domain.subscribe.SubscribeRepository;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
+import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
+import com.cos.photogramstart.web.dto.user.UserProfileDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,7 +19,30 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 	
 	private final UserRepository userRepository;
+	private final SubscribeRepository subscribeRepository;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder; // 비밀번호는 암호화를 해서 넣어줘야 함
+	
+	@Transactional(readOnly = true)
+	public UserProfileDto 회원프로필(int pageUserId, int principalId) {
+		UserProfileDto dto = new UserProfileDto();
+		
+		// select * from image where userId = :userId;
+		User userEntity = userRepository.findById(pageUserId).orElseThrow(()->{
+			throw new CustomException("해당 프로필 페이지는 없는 페이지 입니다");
+		});
+		
+		dto.setUser(userEntity);
+		dto.setPageOwnerState(pageUserId == principalId);
+		dto.setImageCount(userEntity.getImages().size());
+		
+		int subscribeState =  subscribeRepository.mSubscribeState(principalId, pageUserId);
+		int subscribeCount = subscribeRepository.mSubscribeCount(pageUserId);
+		
+		dto.setSubscribeState(subscribeState == 1);
+		dto.setSubscribeCount(subscribeCount);
+		
+		return dto;
+	}
 
 	@Transactional // 데이터베이스의 상태를 변경하는 작업 또는 한번에 수행되어야 하는 연산을 사용할때 활용하는 annotation
 	public User 회원수정(int id,User user) {
