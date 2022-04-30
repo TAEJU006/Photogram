@@ -87,10 +87,10 @@
 					<div class="img-box">
 						<a href=""> <img src="/upload/${image.postImageUrl}" />
 						</a>
-						<%-- <div class="comment">
+						  <div class="comment">
 							<a href="#" class=""> <i class="fas fa-heart"></i><span>${image.likeCount}</span>
-							</a> --%>
-						<!-- </div> -->
+							</a>
+						 </div> 
 					</div>
 				</c:forEach>
 
