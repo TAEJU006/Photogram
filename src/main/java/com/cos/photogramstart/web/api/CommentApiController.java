@@ -33,17 +33,6 @@ public class CommentApiController {
 	
 	@PostMapping("/api/comment")
 	public ResponseEntity<?> commentSave(@Valid @RequestBody CommentDto commentDto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalDetails principalDetails){
-		
-		if(bindingResult.hasErrors()) {
-			Map<String,String> errorMap = new HashMap<>();
-			
-			//bindingResult의 getFieldErrors에 다 모아줌, for문 돌면서 에러를  error에 담아줌
-			for(FieldError error:bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(),error.getDefaultMessage());
-			}
-			throw new CustomValidationApiException("유효성 검사 실패 :(",errorMap);
-		}
-		
 		Comment comment = commentService.댓글쓰기(commentDto.getContent(),commentDto.getImageId(),principalDetails.getUser().getId()); // content, imageId, userId
 		return new ResponseEntity<>(new CMRespDto<>(1,"댓글쓰기성공",comment),HttpStatus.CREATED);
 	}

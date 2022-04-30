@@ -50,16 +50,6 @@ public class AuthController {
 	public String signup(@Valid SignupDto signupDto, BindingResult bindingResult) { // key=value (x-www-form-urlencoded)
 		log.info(signupDto.toString());
 		// User <- SignupDto
-
-		if(bindingResult.hasErrors()) {
-			Map<String,String> errorMap = new HashMap<>();
-			
-			//bindingResult의 getFieldErrors에 다 모아줌, for문 돌면서 에러를  error에 담아줌
-			for(FieldError error:bindingResult.getFieldErrors()) {
-				errorMap.put(error.getField(),error.getDefaultMessage());
-			}
-			throw new CustomValidationException("유효성 검사 실패 :(",errorMap);
-		}else {
 		
 		// User < - SignupDto
 				User user = signupDto.toEntity();
@@ -71,4 +61,4 @@ public class AuthController {
 
 			}
 		}
-}
+
