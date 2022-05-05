@@ -68,12 +68,11 @@ public class PrincipalDetails implements UserDetails, OAuth2User{
 
 	@Override
 	public Map<String, Object> getAttributes() {
-		return attributes;  // {id:343434343, name:최주호, email:ssarmango@nate.com}
+		return attributes;  // {id=125870903390512, name=Suzy Violet, email=aloha006@naver.com}
 	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
 		return (String) attributes.get("name");
 	}
 
